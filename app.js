@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const db = require('./db') // This isn't something we install, it's something we write.
-const port = process.env.port || 3000
+const port = process.env.PORT || 3000
 
 
 app.use(express.urlencoded({extended: false}))
