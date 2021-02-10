@@ -39,7 +39,7 @@ const createUser = (req, res) => {
     // console.log(`db getUsers`);
     const email = req.body.email
     let getUsersSQL = `insert into users (first, last, email, age) values ($1, $2, $3, $4);`
-    pool.query(getUsersSQL, [first, last, email, age] (err, results) => {
+    pool.query(getUsersSQL, [first, last, email, age], (err, results) => {
         if (err) throw err
     //   console.log(results)
       res.status(200).json(results.rows);
