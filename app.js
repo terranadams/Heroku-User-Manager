@@ -13,4 +13,4 @@ app.post('/createUser', db.createUser)
 
 app.listen(port, () => {
     console.log(`App listening on port ${port}`)
-})
+});
