@@ -5,8 +5,9 @@ const DBConnectionString = process.env.DATABASE_URL // this gets provided from h
 
 const params = url.parse(DBConnectionString)
 
+// This logic is on my config object
 const auth = params.auth.split(':')
-let SSL = process.env.SSL
+let SSL = process.env.SSL // This reaches into .env for the SSL value, but by default it's always true.
 if (SSL === 'false') {
     SSL = false
 } else if (SSL = 'heroku') {
@@ -14,7 +15,9 @@ if (SSL === 'false') {
 } else {
     SSL = true
 }
-
+// Swap SSL to either be false: for local database, true: for me to run app on heroku and connect to heroku DB
+// Third value is {rejectUnauthorized: false} which is like a bypass for when I'm running the app on my laptop
+// and connect to DB in heroku
 const config = {
     user: auth[0],
     password: auth[1],
