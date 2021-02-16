@@ -16,7 +16,7 @@ app.post('/create', db.createUser);
 app.get('/edit/:userid', db.getUserEditPage);
 app.post('/edit/:userid', db.updateUser);
 app.post('/deleteUser/:id', db.deleteUser);
-app.get('/user/:id', db.getUserById);
+app.post('/search', db.searchUser);
 
 app.listen(port, ()=>{
     console.log(`app listening on port: ${port}`);

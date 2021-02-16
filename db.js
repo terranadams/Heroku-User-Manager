@@ -47,15 +47,34 @@ const getUserEditPage = (req, res) => {
         res.render('editForm', { user: results.rows[0] })
     });
 }
-const getUserById = (req, res) => {
-    let id = req.params.id;
-    console.log(`getUserById id=${id}`);
-    let getUserSQL = 'select * from users where id = $1';
-    pool.query(getUserSQL, [id], (err, results) => {
+const searchUser = (req, res) => {
+    let search = req.body.search
+    // console.log(search)
+
+
+
+    // let filteredList = data.filter(x => {
+    //     let first = x.first.toLowerCase()
+    //     let last = x.last.toLowerCase()
+    //     return first == search || last == search
+    // })
+    pool.query('select * from users', (err, results) => {
         if (err) throw err
-        //console.log(results);
-        // res.status(200).json(results.rows);
-    });
+        let filteredList = results.rows.filter(x => {
+            let first = x.first.toLowerCase()
+            let last = x.last.toLowerCase()
+            return first == search || last == search
+        })
+        res.render('index', { users: filteredList })
+    })
+    // let id = req.params.id;
+    // console.log(`getUserById id=${id}`);
+    // let getUserSQL = 'select * from users where id = $1';
+    // pool.query(getUserSQL, [id], (err, results) => {
+    //     if (err) throw err
+    //     //console.log(results);
+    //     // res.status(200).json(results.rows);
+    // });
 }
 
 const getForm = (req, res) => {
@@ -110,7 +129,7 @@ const deleteUser = (req, res) => {
 
 module.exports = {
     getUsers,
-    getUserById,
+    searchUser,
     createUser,
     updateUser,
     deleteUser,
