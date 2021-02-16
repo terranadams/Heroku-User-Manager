@@ -9,7 +9,6 @@ app.use(express.urlencoded({extended:false}));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
-//api for the client (browser)
 app.get('/', db.getUsers); 
 app.get('/create', db.getForm)
 app.post('/create', db.createUser);

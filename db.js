@@ -31,8 +31,6 @@ const getUsers = (req, res) => {
     let getUsersSQL = 'select * from users ';
     pool.query(getUsersSQL, (err, results) => {
         if (err) throw err
-        // console.log(results.rows);
-        // res.status(200).json(results.rows);
         let ordered = results.rows.sort((a, b) => (a.userid > b.userid) ? 1 : -1)
         res.render('index', { users: ordered })
     });
@@ -40,7 +38,7 @@ const getUsers = (req, res) => {
 
 let sorter = false
 const sortUsers = (req, res) => {
-    function compareAsc(a, b) { // This function sorts the users alphabetically in descending order
+    function compareAsc(a, b) { // This function sorts the users alphabetically in Ascending order
         const userA = a.first.toLowerCase();
         const userB = b.first.toLowerCase();
 
@@ -84,14 +82,12 @@ const getUserEditPage = (req, res) => {
     let getUserSQL = 'select * from users where userid = $1';
     pool.query(getUserSQL, [userid], (err, results) => {
         if (err) throw err
-        // console.log(results.rows[0]);
         res.render('editForm', { user: results.rows[0] })
     });
 }
 
 const searchUser = (req, res) => {
     let search = req.body.search
-    // console.log(search)
     pool.query('select * from users', (err, results) => {
         if (err) throw err
         let filteredList = results.rows.filter(x => {
@@ -136,20 +132,15 @@ const updateUser = (req, res) => {
     let updateUserSQL = 'update users set first = $1, last = $2, email = $3, age = $4 where userid = $5';
     pool.query(updateUserSQL, [first, last, email, age, userid], (err, results) => {
         if (err) throw err
-        //console.log(results);
-        // res.status(200).json(results);
         res.redirect('/')
     });
 }
 
 const deleteUser = (req, res) => {
     const userid = req.params.id;
-    // console.log(userid)
     let deleteUserSQL = 'delete from users where userid = $1 ';
     pool.query(deleteUserSQL, [userid], (err, results) => {
         if (err) throw err
-        //console.log(results);
-        // res.status(200).json(results);
         res.redirect('/')
     });
 }
