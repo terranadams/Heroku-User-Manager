@@ -3,9 +3,6 @@ html
     body
         form(method='post', action='/edit/' + user.userid)
             div
-                label(for='userID') UserID: 
-                input(id='userID', name='userID', value=user.userid)
-            div
                 label(for='first') First name: 
                 input(id='first', name='first', value=user.first)
             div

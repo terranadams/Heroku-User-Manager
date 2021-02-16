@@ -10,11 +10,12 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
 //api for the client (browser)
-app.get('/', db.getUsers); //http://localhost:8080/users
-app.get('/user/:id', db.getUserById); //http://localhost:8080/user/2
-app.post('/createUser', db.createUser); //curl -d "name=hank&email=hank@example.org" -X POST http://localhost:8080/createUser
-app.post('/updateUser', db.updateUser); //curl -d "name=samuel&id=2" -X POST http://localhost:8080/updateUser
-app.post('/deleteUser/:id', db.deleteUser); //curl http://localhost:8080/deleteUser/3
+app.get('/', db.getUsers); 
+app.post('/createUser', db.createUser);
+app.get('/edit/:userid', db.getUserEditPage);
+app.post('/edit/:userid', db.updateUser);
+app.post('/deleteUser/:id', db.deleteUser);
+app.get('/user/:id', db.getUserById);
 
 app.listen(port, ()=>{
     console.log(`app listening on port: ${port}`);

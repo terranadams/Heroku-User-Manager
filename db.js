@@ -38,6 +38,16 @@ const getUsers = (req, res)=>{
         res.render('index', {users: results.rows})
     });
 }
+
+const getUserEditPage = (req, res) => {
+    let userid = req.params.userid
+    let getUserSQL = 'select * from users where userid = $1';
+    pool.query(getUserSQL,[userid], (err, results)=>{
+        if (err) throw err
+        // console.log(results.rows[0]);
+        res.render('editForm', {user: results.rows[0]})
+    });
+}
 const getUserById = (req, res)=>{
     let id = req.params.id;
     console.log(`getUserById id=${id}`);
@@ -50,10 +60,12 @@ const getUserById = (req, res)=>{
 }
 
 const createUser = (req, res)=>{
+    const first = req.body.first
+    const last = req.body.last
     const email = req.body.email;
-    const name = req.body.name;
-    let updateUserSQL = 'insert into users (email, name) values ($1, $2) RETURNING id';
-    pool.query(updateUserSQL,[email, name], (err, results)=>{
+    const age = req.body.age;
+    let updateUserSQL = 'insert into users (userid, first, last, email, age) values ($1, $2) RETURNING id';
+    pool.query(updateUserSQL,[userid, first,last, email, age], (err, results)=>{
         if (err) throw err
         let newId = results.rows[0].id;
         //console.log(`new id =${newId}`);
@@ -61,13 +73,18 @@ const createUser = (req, res)=>{
     });
 }
 const updateUser = (req, res)=>{
-    const id = req.body.id;
-    const name = req.body.name;
-    let updateUserSQL = 'update users set name = $1 where id = $2';
-    pool.query(updateUserSQL,[name, id], (err, results)=>{
+    const userid = req.params.userid
+    const first = req.body.first
+    const last = req.body.last
+    const email = req.body.email
+    const age = req.body.age
+
+    let updateUserSQL = 'update users set first = $1, last = $2, email = $3, age = $4 where userid = $5';
+    pool.query(updateUserSQL,[first, last, email, age, userid], (err, results)=>{
         if (err) throw err
         //console.log(results);
         // res.status(200).json(results);
+        res.redirect('/')
     });
 }
 
@@ -88,5 +105,6 @@ module.exports = {
     getUserById,
     createUser,
     updateUser,
-    deleteUser    
+    deleteUser, 
+    getUserEditPage  
 }
