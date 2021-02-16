@@ -32,9 +32,7 @@ const pool = new Pool(config);
 const getUsers = (req, res)=>{
     let getUsersSQL = 'select * from users ';
     pool.query(getUsersSQL, (err, results)=>{
-        if(err){
-            throw err;
-        }
+        if (err) throw err
         // console.log(results.rows);
         // res.status(200).json(results.rows);
         res.render('index', {users: results.rows})
@@ -56,12 +54,10 @@ const createUser = (req, res)=>{
     const name = req.body.name;
     let updateUserSQL = 'insert into users (email, name) values ($1, $2) RETURNING id';
     pool.query(updateUserSQL,[email, name], (err, results)=>{
-        if(err){
-            throw err;
-        }
+        if (err) throw err
         let newId = results.rows[0].id;
         //console.log(`new id =${newId}`);
-        res.status(200).json(newId);
+        // res.status(200).json(newId);
     });
 }
 const updateUser = (req, res)=>{
@@ -69,21 +65,21 @@ const updateUser = (req, res)=>{
     const name = req.body.name;
     let updateUserSQL = 'update users set name = $1 where id = $2';
     pool.query(updateUserSQL,[name, id], (err, results)=>{
-        if(err){
-            throw err;
-        }
+        if (err) throw err
         //console.log(results);
-        res.status(200).json(results);
+        // res.status(200).json(results);
     });
 }
 
 const deleteUser = (req, res)=>{
-    const id = req.params.id;
-    let deleteUserSQL = 'delete from users where id = $1 ';
-    pool.query(deleteUserSQL,[id], (err, results)=>{
-        if(err) throw err
+    const userid = req.params.id;
+    console.log(userid)
+    let deleteUserSQL = 'delete from users where userid = $1 ';
+    pool.query(deleteUserSQL,[userid], (err, results)=>{
+        if (err) throw err
         //console.log(results);
         // res.status(200).json(results);
+        res.redirect('/')
     });
 }
 

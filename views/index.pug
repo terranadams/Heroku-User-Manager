@@ -37,5 +37,5 @@ html
                         a(href='/edit/' + user.userid)
                             //- This anchor tag is actually a 'get' request, and the action is the href url.
                             button Edit
-                        form(action='/delete/' + user.userid, method='post')
+                        form(action='/deleteUser/' + user.userid, method='post')
                             button(type='submit') Delete
