@@ -11,7 +11,8 @@ app.set("view engine", "pug");
 
 //api for the client (browser)
 app.get('/', db.getUsers); 
-app.post('/createUser', db.createUser);
+app.get('/create', db.getForm)
+app.post('/create', db.createUser);
 app.get('/edit/:userid', db.getUserEditPage);
 app.post('/edit/:userid', db.updateUser);
 app.post('/deleteUser/:id', db.deleteUser);
