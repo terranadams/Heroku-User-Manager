@@ -4,6 +4,8 @@ const app = express();
 const db = require('./db');
 const port = process.env.PORT || 3000;
 
+// TO START APP LOCALLY, RUN 'npm run dev' within this directory on your machine
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({extended:false}));
 app.set("views", path.join(__dirname, "views"));
