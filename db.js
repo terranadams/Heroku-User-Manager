@@ -38,6 +38,47 @@ const getUsers = (req, res) => {
     });
 }
 
+let sorter = false
+const sortUsers = (req, res) => {
+    function compareAsc(a, b) { // This function sorts the users alphabetically in descending order
+        const userA = a.first.toLowerCase();
+        const userB = b.first.toLowerCase();
+
+        let comparison = 0;
+        if (userA > userB) {
+            comparison = 1;
+        } else if (userA < userB) {
+            comparison = -1;
+        }
+        return comparison;
+    }
+    function compareDes(a, b) { // This function sorts the users alphabetically in descending order
+        const userA = a.first.toLowerCase();
+        const userB = b.first.toLowerCase();
+
+        let comparison = 0;
+        if (userA > userB) {
+            comparison = -1;
+        } else if (userA < userB) {
+            comparison = 1;
+        }
+        return comparison;
+    }
+    if (!sorter) {
+        pool.query('select * from users', (err, results) => {
+            let newList = results.rows.sort(compareAsc)
+            res.render('index', {users: newList })
+        })
+        sorter = true
+    } else {
+        pool.query('select * from users', (err, results) => {
+            let newList = results.rows.sort(compareDes)
+            res.render('index', {users: newList })
+        })
+        sorter = false
+    }
+}
+
 const getUserEditPage = (req, res) => {
     let userid = req.params.userid
     let getUserSQL = 'select * from users where userid = $1';
@@ -134,5 +175,6 @@ module.exports = {
     updateUser,
     deleteUser,
     getUserEditPage,
-    getForm
+    getForm,
+    sortUsers
 }
