@@ -27,30 +27,70 @@ const config = {
     ssl: SSL
 }
 
-const pool = new Pool(config)
+const pool = new Pool(config);
 
-const getUsers = (req, res) => { // This gets put into the callback for the initial get request
-    let getUsersSQL = 'select * from users '
-    pool.query(getUsersSQL, (err, results) => {
-        if(err) throw err
-        // console.log(results)
-        res.status(200).json(results.rows)
-    })
+const getUsers = (req, res)=>{
+    let getUsersSQL = 'select * from users ';
+    pool.query(getUsersSQL, (err, results)=>{
+        if(err){
+            throw err;
+        }
+        // console.log(results.rows);
+        // res.status(200).json(results.rows);
+        res.render('index', {users: results.rows})
+    });
+}
+const getUserById = (req, res)=>{
+    let id = req.params.id;
+    console.log(`getUserById id=${id}`);
+    let getUserSQL = 'select * from users where id = $1';
+    pool.query(getUserSQL,[id], (err, results)=>{
+        if (err) throw err
+        //console.log(results);
+        // res.status(200).json(results.rows);
+    });
 }
 
-const createUser = (req, res) => {
-    // console.log(`db getUsers`);
-    const email = req.body.email
-    let getUsersSQL = `insert into users (first, last, email, age) values ($1, $2, $3, $4);`
-    pool.query(getUsersSQL, [first, last, email, age], (err, results) => {
-        if (err) throw err
-    //   console.log(results)
-      res.status(200).json(results.rows);
+const createUser = (req, res)=>{
+    const email = req.body.email;
+    const name = req.body.name;
+    let updateUserSQL = 'insert into users (email, name) values ($1, $2) RETURNING id';
+    pool.query(updateUserSQL,[email, name], (err, results)=>{
+        if(err){
+            throw err;
+        }
+        let newId = results.rows[0].id;
+        //console.log(`new id =${newId}`);
+        res.status(200).json(newId);
     });
-  };
+}
+const updateUser = (req, res)=>{
+    const id = req.body.id;
+    const name = req.body.name;
+    let updateUserSQL = 'update users set name = $1 where id = $2';
+    pool.query(updateUserSQL,[name, id], (err, results)=>{
+        if(err){
+            throw err;
+        }
+        //console.log(results);
+        res.status(200).json(results);
+    });
+}
+
+const deleteUser = (req, res)=>{
+    const id = req.params.id;
+    let deleteUserSQL = 'delete from users where id = $1 ';
+    pool.query(deleteUserSQL,[id], (err, results)=>{
+        if(err) throw err
+        //console.log(results);
+        // res.status(200).json(results);
+    });
+}
 
 module.exports = {
     getUsers,
-    createUser
+    getUserById,
+    createUser,
+    updateUser,
+    deleteUser    
 }
-

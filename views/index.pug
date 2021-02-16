@@ -1,0 +1,41 @@
+doctype html
+html
+    head
+         
+    body
+        h2 MongoDB User Manager
+        a(href='/create')
+            button Add User
+        span
+            a(href='/')
+                button Full List
+        span
+            a(href='/sort')
+                button Sort (both ways)
+        p
+        span
+            form(action='/search', method='post')
+                input(type='text', id='search', name='search')
+                button(type='submit') Search
+        p
+        table(style='', border='1')
+            tr
+                th UserID
+                th First name
+                th Last name
+                th Email
+                th Age
+                th Action
+            each user in users
+                tr
+                    td #{user.userid}
+                    td #{user.first} 
+                    td #{user.last}
+                    td #{user.email}
+                    td #{user.age}
+                    td
+                        a(href='/edit/' + user.userid)
+                            //- This anchor tag is actually a 'get' request, and the action is the href url.
+                            button Edit
+                        form(action='/delete/' + user.userid, method='post')
+                            button(type='submit') Delete
